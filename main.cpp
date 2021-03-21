@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     std::string best_nonce;
     std::vector<unsigned char> best_hash;
     Tools::Timer timer;
-    unsigned long long steps = 30000000;
+    unsigned long long steps = 1000000000;
     for(unsigned long long i=0; i<steps; ++i)
     {
         int bytes = 4 + rng.rand_int(61);
@@ -46,12 +46,11 @@ int main(int argc, char** argv)
         if((i+1) % 10000 == 0)
         {
             save("nonce.dat", best_nonce);
-            std::cout << (i+1) << std::endl;
+            std::cout << (i+1) << ". ";
+            std::cout << "Hash rate = " << double(i + 1)/timer.stop();
+            std::cout << " H/s." << std::endl;
         }
     }
-
-    std::cout << "Hash rate = " << double(steps)/timer.stop() << " H/s.";
-    std::cout << std::endl;
 
     return 0;
 }
