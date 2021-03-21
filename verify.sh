@@ -1,2 +1,2 @@
 #!/bin/bash
-cat message.txt proof.dat | sha256sum
+cat message.txt nonce.dat | sha256sum

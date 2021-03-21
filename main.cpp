@@ -28,10 +28,12 @@ int main(int argc, char** argv)
     std::string best_nonce;
     std::vector<unsigned char> best_hash;
     Tools::Timer timer;
-    unsigned long long steps = 10000000;
+    unsigned long long steps = 30000000;
     for(unsigned long long i=0; i<steps; ++i)
     {
-        auto nonce = POW::generate_bytes(32, rng);
+        int bytes = 4 + rng.rand_int(61);
+
+        auto nonce = POW::generate_bytes(bytes, rng);
         engine.reset();
         engine.update(message + nonce);
         auto digest = engine.digest();
@@ -41,10 +43,13 @@ int main(int argc, char** argv)
             best_hash = digest;
         }
 
-        if((i+1) % 1000 == 0)
+        if((i+1) % 10000 == 0)
+        {
+            save("nonce.dat", best_nonce);
             std::cout << (i+1) << std::endl;
+        }
     }
-    save("proof.dat", best_nonce);
+
     std::cout << "Hash rate = " << double(steps)/timer.stop() << " H/s.";
     std::cout << std::endl;
 
